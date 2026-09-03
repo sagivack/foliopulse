@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------
+// Modèles
+// ---------------------------------------------------------------------
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String // hash bcrypt, jamais en clair
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profiles     InvestmentProfile[]
+  answers      Answer[]
+  watchlist    Watchlist[]
+  holdings     Holding[]
+  transactions Transaction[]
+  refreshToken RefreshToken?
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+model InvestmentProfile {
+  id            Int               @id @default(autoincrement())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score         Int
+  type          String
+  riskTolerance String
+  horizon       String
+  createdAt     DateTime          @default(now())
+
+  @@index([userId])
+  @@map("investment_profiles")
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  text      String
+  order     Int      @unique // ordre d'affichage dans le questionnaire (1 à 12)
+  weight    Float    @default(1.0) // poids dans le calcul du score de risque
+  createdAt DateTime @default(now())
+
+  answers     Answer[]
+
+  @@map("questions")
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value      Int // valeur numérique de la réponse choisie (ex: échelle 1-5)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, questionId])
+  @@map("answers")
+}
+
+model Watchlist {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  symbol    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, symbol])
+  @@map("watchlists")
+}
+
+model Holding {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  symbol    String
+  quantity  Float
+  avgPrice  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, symbol])
+  @@map("holdings")
+}
+
+model MarketDataCache {
+  id        Int      @id @default(autoincrement())
+  symbol    String   @unique
+  price     Float?
+  change    Float?   @default(0)
+  percentChange Float? @default(0)
+  sentiment String? // JSON stringifié
+  updatedAt DateTime @updatedAt
+
+  @@map("market_data_cache")
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // "BUY" ou "SELL"
+  symbol    String
+  quantity  Float
+  price     Float
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("transactions")
+}
