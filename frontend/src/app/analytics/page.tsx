@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const res = await fetch('http://localhost:4000/api/ai/macro', {
+            const res = await fetch('https://foliopulse.onrender.com/api/ai/macro', {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             if (res.ok) {

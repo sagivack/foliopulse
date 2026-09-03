@@ -14,7 +14,7 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            const res = await fetch('http://localhost:4000/api/auth/login', {
+            const res = await fetch('https://foliopulse.onrender.com/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

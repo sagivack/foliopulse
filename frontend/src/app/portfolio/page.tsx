@@ -32,7 +32,7 @@ export default function PortfolioPage() {
             try {
                 const token = localStorage.getItem('token');
                 const headers = { 'Authorization': `Bearer ${token}` };
-                const res = await fetch('http://localhost:4000/api/portfolio', { headers });
+                const res = await fetch('https://foliopulse.onrender.com/api/portfolio', { headers });
                 if (res.ok) {
                     const data = await res.json();
                     setPortfolio(data);

@@ -59,7 +59,7 @@ export default function DashboardPage() {
             try {
                 const results = await Promise.all(
                     symbols.map(async (sym) => {
-                        const res = await fetch(`http://localhost:4000/api/market/quote/${sym}`, { headers });
+                        const res = await fetch(`https://foliopulse.onrender.com/api/market/quote/${sym}`, { headers });
                         if (res.status === 401) {
                             window.location.href = '/login';
                             throw new Error("Unauthorized");
@@ -84,7 +84,7 @@ export default function DashboardPage() {
         fetchQuotes();
 
         // Connexion WebSocket pour les prix en direct
-        const socket = io('http://localhost:4000');
+        const socket = io('https://foliopulse.onrender.com');
         
         socket.on('connect', () => {
             ['AAPL', 'TSLA', 'NVDA'].forEach(sym => socket.emit('subscribe', sym));
@@ -131,7 +131,7 @@ export default function DashboardPage() {
         setIsAiLoading(true);
         setQuestion("");
 
-        fetch('http://localhost:4000/api/ai/ask', {
+        fetch('https://foliopulse.onrender.com/api/ai/ask', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

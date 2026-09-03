@@ -45,8 +45,8 @@ export default function ProfilePage() {
 
         try {
             const [profileRes, historyRes] = await Promise.all([
-                fetch('http://localhost:4000/api/profiles/me', { headers }),
-                fetch('http://localhost:4000/api/portfolio/history', { headers })
+                fetch('https://foliopulse.onrender.com/api/profiles/me', { headers }),
+                fetch('https://foliopulse.onrender.com/api/portfolio/history', { headers })
             ]);
 
             if (profileRes.ok) {
@@ -74,7 +74,7 @@ export default function ProfilePage() {
         setShowQuestionnaire(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:4000/api/profiles/questions', {
+            const res = await fetch('https://foliopulse.onrender.com/api/profiles/questions', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {
@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:4000/api/profiles/questionnaire', {
+            const res = await fetch('https://foliopulse.onrender.com/api/profiles/questionnaire', {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`,

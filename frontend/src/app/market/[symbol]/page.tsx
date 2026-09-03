@@ -52,7 +52,7 @@ export default function MarketDetailPage({ params }: { params: Promise<{ symbol:
             const headers: Record<string, string> = { 'Content-Type': 'application/json' };
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
-            const res = await fetch(`http://localhost:4000/api/portfolio/${endpoint}`, {
+            const res = await fetch(`https://foliopulse.onrender.com/api/portfolio/${endpoint}`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify({ symbol, quantity: Number(quantity), price: quote.currentPrice })
@@ -81,7 +81,7 @@ export default function MarketDetailPage({ params }: { params: Promise<{ symbol:
         const fetchData = async () => {
             try {
                 // Fetch Quote
-                const quoteRes = await fetch(`http://localhost:4000/api/market/quote/${symbol}`);
+                const quoteRes = await fetch(`https://foliopulse.onrender.com/api/market/quote/${symbol}`);
                 if (!quoteRes.ok) throw new Error("Impossible de charger les données du marché");
                 const quoteJson = await quoteRes.json();
                 setQuote(quoteJson);
@@ -93,7 +93,7 @@ export default function MarketDetailPage({ params }: { params: Promise<{ symbol:
                     headers['Authorization'] = `Bearer ${token}`;
                 }
 
-                const aiRes = await fetch(`http://localhost:4000/api/ai/recommendation`, {
+                const aiRes = await fetch(`https://foliopulse.onrender.com/api/ai/recommendation`, {
                     method: 'POST',
                     headers,
                     body: JSON.stringify({ symbol })
@@ -118,7 +118,7 @@ export default function MarketDetailPage({ params }: { params: Promise<{ symbol:
         fetchData();
 
         // Connexion WebSocket
-        const socket = io('http://localhost:4000');
+        const socket = io('https://foliopulse.onrender.com');
         
         socket.on('connect', () => {
             socket.emit('subscribe', symbol);
