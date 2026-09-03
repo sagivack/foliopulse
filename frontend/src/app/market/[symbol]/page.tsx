@@ -139,7 +139,7 @@ export default function MarketDetailPage({ params }: { params: Promise<{ symbol:
             }, 1000);
         });
 
-        return () => socket.disconnect();
+        return () => { socket.disconnect(); };
     }, [symbol]);
 
     return (

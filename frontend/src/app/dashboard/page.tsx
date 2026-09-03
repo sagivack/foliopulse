@@ -112,7 +112,7 @@ export default function DashboardPage() {
                     if (!prev[data.symbol]) return prev;
                     return {
                         ...prev,
-                        [data.symbol]: { ...prev[data.symbol], flash: undefined }
+                        [data.symbol]: { ...(prev[data.symbol] as Quote), flash: undefined }
                     };
                 });
             }, 1000);
